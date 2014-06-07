@@ -29,7 +29,7 @@
           {{#each}}
           <div class="game">
             <p>
-              {{name}}
+              {{#link-to 'game' this}}{{name}}{{/link-to}}
             </p>
           </div>
           {{/each}}
@@ -39,6 +39,11 @@
         </div>
       </div> <!-- row -->
     </div>
+  </script>
+
+  <script type="text/x-handlebars" id="game">
+    <button {{action 'newGame'}} type="button" class="btn btn-primary">New game</button>
+    <h1>{{name}}</h1>
   </script>
 
   <script type="text/x-handlebars" id="players">

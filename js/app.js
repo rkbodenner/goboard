@@ -1,7 +1,9 @@
 App = Ember.Application.create();
 
 App.Router.map(function() {
-  this.resource('collection');
+  this.resource('collection', function() {
+    this.resource('game', { path: ':game_id' });
+  });
   this.resource('games');
   this.resource('players', function() {
     this.resource('player', { path: ':player_id' });
@@ -10,7 +12,17 @@ App.Router.map(function() {
 
 App.CollectionRoute = Ember.Route.extend({
   model: function() {
-    return collection;
+    return $.getJSON('http://localhost:8080/collection').then(function(data) {
+      var i = 0;
+      collection = data.Games.map(function(game) {
+        var g = {};
+        g.id = i.toString();
+        // Translate from serialized golang public fields
+        g.name = game.Name
+        return g;
+      });
+      return collection;
+    });
   }
 });
 
