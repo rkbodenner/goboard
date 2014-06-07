@@ -14,11 +14,31 @@
         <a class="navbar-brand" href="#">goboard</a>
       </div>
       <ul class="nav navbar-nav">
+        <li>{{#link-to 'collection'}}Collection{{/link-to}}</li>
         <li>{{#link-to 'games'}}Games{{/link-to}}</li>
         <li>{{#link-to 'players'}}Players{{/link-to}}</li>
       </ul>
     </nav>
     {{outlet}}
+  </script>
+
+  <script type="text/x-handlebars" id="collection">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-3">
+          {{#each}}
+          <div class="game">
+            <p>
+              {{name}}
+            </p>
+          </div>
+          {{/each}}
+        </div>
+        <div class="col-xs-9">
+          {{outlet}}
+        </div>
+      </div> <!-- row -->
+    </div>
   </script>
 
   <script type="text/x-handlebars" id="players">

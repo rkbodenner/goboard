@@ -1,10 +1,17 @@
 App = Ember.Application.create();
 
 App.Router.map(function() {
+  this.resource('collection');
   this.resource('games');
   this.resource('players', function() {
     this.resource('player', { path: ':player_id' });
   });
+});
+
+App.CollectionRoute = Ember.Route.extend({
+  model: function() {
+    return collection;
+  }
 });
 
 App.PlayersRoute = Ember.Route.extend({
@@ -45,3 +52,8 @@ App.PlayerController = Ember.ObjectController.extend({
 });
 
 var players = {};
+
+var collection = [
+  { name: "Dungeon Lords" },
+  { name: "7 Wonders" },
+];
