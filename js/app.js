@@ -8,8 +8,14 @@ App.Router.map(function() {
 });
 
 App.PlayersRoute = Ember.Route.extend({
-  model: function () {
+  model: function() {
     return players;
+  }
+});
+
+App.PlayerRoute = Ember.Route.extend({
+  model: function(params) {
+    return players.findBy('id', params.player_id);
   }
 });
 
@@ -28,11 +34,11 @@ App.PlayerController = Ember.ObjectController.extend({
 
 var players = [
 {
-  id: 1,
+  id: "1",
   name: "Player 1",
   bio: "Loves a red/white weenie deck and eats breakfast for breakfast"
 }, {
-  id: 2,
+  id: "2",
   name: "Player 2",
   bio: "Is actually Player 1, just sitting in that chair over there"
 }
