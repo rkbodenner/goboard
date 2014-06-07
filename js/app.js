@@ -13,6 +13,19 @@ App.PlayersRoute = Ember.Route.extend({
   }
 });
 
+App.PlayerController = Ember.ObjectController.extend({
+  isEditing: false,
+
+  actions: {
+    edit: function() {
+      this.set('isEditing', true);
+    },
+    doneEditing: function() {
+      this.set('isEditing', false);
+    }
+  }
+});
+
 var players = [
 {
   id: 1,

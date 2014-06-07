@@ -35,7 +35,18 @@
   </script>
 
   <script type="text/x-handlebars" id="player">
+    {{#if isEditing}}
+      {{partial 'player/edit'}}
+      <button {{action 'doneEditing'}}>Done</button>
+    {{else}}
+      <button {{action 'edit'}}>Edit</button>
+    {{/if}}
+
     <h1>{{name}}</h1>
+  </script>
+
+  <script type="text/x-handlebars" id="player/_edit">
+    <p>{{input type="text" value=name}}</p>
   </script>
 
   <script src="js/libs/jquery-1.10.2.js"></script>
