@@ -16,15 +16,12 @@ App.CollectionRoute = Ember.Route.extend({
 
 App.PlayersRoute = Ember.Route.extend({
   model: function() {
-    var i = 0;
     return $.getJSON('http://localhost:8080/players').then(function(data) {
       players = data.map(function(player) {
-        console.log(player);
         var p = {};
         // Translate from serialized golang public fields
         p.id = player.Id.toString();
         p.name = player.Name
-        console.log(p);
         return p;
       });
       return players;
