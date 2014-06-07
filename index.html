@@ -47,24 +47,30 @@
   </script>
 
   <script type="text/x-handlebars" id="players">
-    {{#each}}
-    <div class="player">
-      <p>
-        {{#link-to 'player' this}}{{name}}{{/link-to}}: {{bio}}
-      </p>
-    </div>
-    {{/each}}
-    <div>
-      {{outlet}}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-3">
+          {{#each}}
+          <div class="player">
+            <p>
+              {{#link-to 'player' this}}{{name}}{{/link-to}}
+            </p>
+          </div>
+          {{/each}}
+        </div>
+        <div class="col-xs-9">
+          {{outlet}}
+        </div>
+      </div> <!-- row -->
     </div>
   </script>
 
   <script type="text/x-handlebars" id="player">
     {{#if isEditing}}
       {{partial 'player/edit'}}
-      <button {{action 'doneEditing'}}>Done</button>
+      <button {{action 'doneEditing'}} type="button" class="btn btn-success">Done</button>
     {{else}}
-      <button {{action 'edit'}}>Edit</button>
+      <button {{action 'edit'}} type="button" class="btn">Edit</button>
     {{/if}}
 
     <h1>{{name}}</h1>
