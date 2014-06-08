@@ -14,15 +14,15 @@
         <a class="navbar-brand" href="#">goboard</a>
       </div>
       <ul class="nav navbar-nav">
-        <li>{{#link-to 'collection'}}Collection{{/link-to}}</li>
         <li>{{#link-to 'games'}}Games{{/link-to}}</li>
+        <li>{{#link-to 'sessions'}}Sessions{{/link-to}}</li>
         <li>{{#link-to 'players'}}Players{{/link-to}}</li>
       </ul>
     </nav>
     {{outlet}}
   </script>
 
-  <script type="text/x-handlebars" id="collection">
+  <script type="text/x-handlebars" id="games">
     <div class="container-fluid">
       <div class="row">
         <div class="col-xs-3">
@@ -42,7 +42,7 @@
   </script>
 
   <script type="text/x-handlebars" id="game">
-    <button {{action 'newGame'}} type="button" class="btn btn-primary">New game</button>
+    <button {{action 'newSession'}} type="button" class="btn btn-primary">New session</button>
     <h1>{{name}}</h1>
   </script>
 

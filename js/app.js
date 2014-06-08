@@ -1,16 +1,16 @@
 App = Ember.Application.create();
 
 App.Router.map(function() {
-  this.resource('collection', function() {
+  this.resource('games', function() {
     this.resource('game', { path: ':game_id' });
   });
-  this.resource('games');
+  this.resource('sessions');
   this.resource('players', function() {
     this.resource('player', { path: ':player_id' });
   });
 });
 
-App.CollectionRoute = Ember.Route.extend({
+App.GamesRoute = Ember.Route.extend({
   model: function() {
     return $.getJSON('http://localhost:8080/collection').then(function(data) {
       var i = 0;
@@ -44,6 +44,14 @@ App.PlayersRoute = Ember.Route.extend({
 App.PlayerRoute = Ember.Route.extend({
   model: function(params) {
     return players.findBy('id', params.player_id);
+  }
+});
+
+App.GameController = Ember.ObjectController.extend({
+  actions: {
+    newSession: function() {
+
+    }
   }
 });
 
