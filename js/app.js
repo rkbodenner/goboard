@@ -4,7 +4,10 @@ App.Router.map(function() {
   this.resource('games', function() {
     this.resource('game', { path: ':game_id' });
   });
-  this.resource('sessions');
+  this.resource('sessions', function() {
+    this.resource('session', { path: ':session_id' });
+    this.route('new');
+  });
   this.resource('players', function() {
     this.resource('player', { path: ':player_id' });
   });
@@ -33,6 +36,12 @@ App.GameRoute = Ember.Route.extend({
   }
 });
 
+App.SessionsRoute = Ember.Route.extend({
+  model: function() {
+    return sessions;
+  }
+});
+
 App.PlayersRoute = Ember.Route.extend({
   model: function() {
     return $.getJSON('http://localhost:8080/players').then(function(data) {
@@ -54,14 +63,6 @@ App.PlayerRoute = Ember.Route.extend({
   }
 });
 
-App.GameController = Ember.ObjectController.extend({
-  actions: {
-    newSession: function() {
-
-    }
-  }
-});
-
 App.PlayerController = Ember.ObjectController.extend({
   isEditing: false,
 
@@ -75,9 +76,32 @@ App.PlayerController = Ember.ObjectController.extend({
   }
 });
 
+var collection = [
+  { id: 1, name: "Dungeon Lords" },
+  { id: 2, name: "7 Wonders" },
+];
+
+App.SessionsNewController = Ember.ObjectController.extend({
+  games: collection,
+
+  actions: {
+    create: function() {
+      var game = this.get('game')
+      sessions.push({
+        id: 43,
+        game_id: game.id,
+        started_date: new Date(),
+      });
+    }
+  }
+});
+
 var players = {};
 
-var collection = [
-  { name: "Dungeon Lords" },
-  { name: "7 Wonders" },
+var sessions = [
+  {
+    id: 1,
+    game_id: 1,
+    started_date: new Date(2014, 6, 6, 20, 20, 20, 0),
+  }
 ];

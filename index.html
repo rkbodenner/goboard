@@ -42,8 +42,39 @@
   </script>
 
   <script type="text/x-handlebars" id="game">
-    <button {{action 'newSession'}} type="button" class="btn btn-primary">New session</button>
+    {{#link-to 'sessions.new'}}<button type="button" class="btn btn-primary">New session</button>{{/link-to}}
     <h1>{{name}}</h1>
+  </script>
+
+  <script type="text/x-handlebars" id="sessions">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-3">
+          {{#each}}
+          <div class="session">
+            <p>
+              {{#link-to 'session' this}}{{started_date}}{{/link-to}}
+            </p>
+          </div>
+          {{/each}}
+        </div>
+        <div class="col-xs-9">
+          {{outlet}}
+        </div>
+      </div> <!-- row -->
+    </div>
+  </script>
+
+  <script type="text/x-handlebars" id="session">
+    <h1>Session {{id}}</h1>
+  </script>
+
+  <script type="text/x-handlebars" id="sessions/new">
+    <h1>Let's play a game.</h1><!--'-->
+    <form class="form-inline">
+      {{view Ember.Select content=games selection=game optionValuePath="content.id" optionLabelPath="content.name" class="form-control"}}
+      <button {{action 'create'}} type="submit" class="btn btn-success">Start</button>
+    </form>
   </script>
 
   <script type="text/x-handlebars" id="players">
