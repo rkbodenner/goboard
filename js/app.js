@@ -16,6 +16,7 @@ App.GamesRoute = Ember.Route.extend({
       var i = 0;
       collection = data.Games.map(function(game) {
         var g = {};
+        i += 1;
         g.id = i.toString();
         // Translate from serialized golang public fields
         g.name = game.Name
@@ -23,6 +24,12 @@ App.GamesRoute = Ember.Route.extend({
       });
       return collection;
     });
+  }
+});
+
+App.GameRoute = Ember.Route.extend({
+  model: function(params) {
+    return collection.findBy('id', params.game_id);
   }
 });
 
