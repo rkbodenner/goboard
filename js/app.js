@@ -1,5 +1,7 @@
 App = Ember.Application.create();
 
+App.ApplicationAdapter = DS.FixtureAdapter.extend();
+
 App.Router.map(function() {
   this.resource('games', function() {
     this.resource('game', { path: ':game_id' });
@@ -15,30 +17,19 @@ App.Router.map(function() {
 
 App.GamesRoute = Ember.Route.extend({
   model: function() {
-    return $.getJSON('http://localhost:8080/collection').then(function(data) {
-      var i = 0;
-      collection = data.Games.map(function(game) {
-        var g = {};
-        i += 1;
-        g.id = i.toString();
-        // Translate from serialized golang public fields
-        g.name = game.Name
-        return g;
-      });
-      return collection;
-    });
+    return this.store.find('game');
   }
 });
 
 App.GameRoute = Ember.Route.extend({
   model: function(params) {
-    return collection.findBy('id', params.game_id);
+    return this.store.find('game', params.game_id);
   }
 });
 
 App.SessionsRoute = Ember.Route.extend({
   model: function() {
-    return sessions;
+    return this.store.find('session');
   }
 });
 
@@ -63,6 +54,10 @@ App.PlayerRoute = Ember.Route.extend({
   }
 });
 
+App.GamesController = Ember.ArrayController.extend({
+
+});
+
 App.PlayerController = Ember.ObjectController.extend({
   isEditing: false,
 
@@ -82,16 +77,17 @@ var collection = [
 ];
 
 App.SessionsNewController = Ember.ObjectController.extend({
-  games: collection,
+  needs: "games",
+  games: Ember.computed.alias("controllers.games"),
 
   actions: {
     create: function() {
-      var game = this.get('game')
-      sessions.push({
-        id: 43,
-        game_id: game.id,
+      var game = this.store.find('game', this.get('game').id);
+      var session = this.store.createRecord('session', {
         started_date: new Date(),
       });
+      session.set('game', game);
+      session.save();
     }
   }
 });
@@ -105,3 +101,16 @@ var sessions = [
     started_date: new Date(2014, 6, 6, 20, 20, 20, 0),
   }
 ];
+
+App.Game = DS.Model.extend({
+  sessions: DS.hasMany('session'),
+  name: DS.attr('string'),
+});
+
+App.Session = DS.Model.extend({
+  game: DS.belongsTo('game'),
+  started_date: DS.attr('date'),
+});
+
+App.Game.FIXTURES = collection;
+App.Session.FIXTURES = sessions;
