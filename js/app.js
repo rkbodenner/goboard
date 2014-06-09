@@ -71,11 +71,6 @@ App.PlayerController = Ember.ObjectController.extend({
   }
 });
 
-var collection = [
-  { id: 1, name: "Dungeon Lords" },
-  { id: 2, name: "7 Wonders" },
-];
-
 App.SessionsNewController = Ember.ObjectController.extend({
   needs: "games",
   games: Ember.computed.alias("controllers.games"),
@@ -94,6 +89,19 @@ App.SessionsNewController = Ember.ObjectController.extend({
 
 var players = {};
 
+App.GameAdapter = DS.RESTAdapter.extend({
+  host: 'http://localhost:8080',
+  pathForType: function(type) {
+    // Only supports find all
+    return 'collection';
+  },
+});
+
+App.Game = DS.Model.extend({
+  sessions: DS.hasMany('session'),
+  name: DS.attr('string'),
+});
+
 var sessions = [
   {
     id: 1,
@@ -102,15 +110,9 @@ var sessions = [
   }
 ];
 
-App.Game = DS.Model.extend({
-  sessions: DS.hasMany('session'),
-  name: DS.attr('string'),
-});
-
 App.Session = DS.Model.extend({
   game: DS.belongsTo('game'),
   started_date: DS.attr('date'),
 });
 
-App.Game.FIXTURES = collection;
 App.Session.FIXTURES = sessions;
