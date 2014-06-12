@@ -7,7 +7,9 @@ App.Router.map(function() {
     this.resource('game', { path: ':game_id' });
   });
   this.resource('sessions', function() {
-    this.resource('session', { path: ':session_id' });
+    this.resource('session', { path: ':session_id' }, function() {
+      this.route('next_step');
+    });
     this.route('new');
   });
   this.resource('players', function() {
@@ -30,6 +32,12 @@ App.GameRoute = Ember.Route.extend({
 App.SessionsRoute = Ember.Route.extend({
   model: function() {
     return this.store.find('session');
+  }
+});
+
+App.SessionNextStepRoute = Ember.Route.extend({
+  model: function() {
+    return this.store.find('session', params.session_id);
   }
 });
 
@@ -87,8 +95,6 @@ App.SessionsNewController = Ember.ObjectController.extend({
   }
 });
 
-var players = {};
-
 App.GameAdapter = DS.RESTAdapter.extend({
   host: 'http://localhost:8080',
   pathForType: function(type) {
@@ -102,16 +108,29 @@ App.Game = DS.Model.extend({
   name: DS.attr('string'),
 });
 
+var players = [
+  { id: 1, name: "Player One" },
+  { id: 2, name: "Player Two" },
+];
+
+App.Player = DS.Model.extend({
+  name: DS.attr('string'),
+});
+
+App.Player.FIXTURES = players;
+
 var sessions = [
   {
     id: 1,
-    game_id: 1,
+    game: 1,
     started_date: new Date(2014, 6, 6, 20, 20, 20, 0),
+    players: [ 1, 2 ],
   }
 ];
 
 App.Session = DS.Model.extend({
   game: DS.belongsTo('game'),
+  players: DS.hasMany('player', { async: true }),
   started_date: DS.attr('date'),
 });
 

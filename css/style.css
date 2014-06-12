@@ -6,3 +6,7 @@
 .active {
   font-weight: bold;
 }
+
+.row.step {
+  padding-bottom: 1.5em;
+}

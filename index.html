@@ -67,6 +67,19 @@
 
   <script type="text/x-handlebars" id="session">
     <h1>Session {{id}}</h1>
+    {{#each player in players}}
+      <div class="row step">
+        <div class="col-xs-9">
+          <div class="player">
+            <h2>{{player.name}}</h2>
+          </div>
+          <div class="step">
+            <p>Current step</p>
+          </div>
+          <button {{action 'nextStep'}} class="btn btn-primary">Next step</button>
+        </div>
+      </div>
+    {{/each}}
   </script>
 
   <script type="text/x-handlebars" id="sessions/new">
