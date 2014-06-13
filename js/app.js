@@ -131,3 +131,15 @@ App.Session = DS.Model.extend({
 });
 
 App.Session.FIXTURES = sessions;
+
+App.SessionAdapter = DS.RESTAdapter.extend({
+  host: 'http://localhost:8080',
+});
+
+App.SessionSerializer = DS.JSONSerializer.extend({
+  normalize: function(type, hash) {
+    hash["game"] = hash["Game"]["id"]
+
+    return this._super.apply(this, arguments);
+  },
+});
