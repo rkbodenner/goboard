@@ -53,7 +53,7 @@
           {{#each}}
           <div class="session">
             <p>
-              {{#link-to 'session' this}}{{started_date}}{{/link-to}}
+              {{#link-to 'session' this}}{{id}}: {{game.name}}{{/link-to}}
             </p>
           </div>
           {{/each}}
@@ -66,7 +66,7 @@
   </script>
 
   <script type="text/x-handlebars" id="session">
-    <h1>Session {{id}}</h1>
+    <h1>Session {{id}}: {{game.name}}</h1>
     {{#each player in players}}
       <div class="row step">
         <div class="col-xs-9">
