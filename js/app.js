@@ -97,10 +97,6 @@ App.SessionsNewController = Ember.ObjectController.extend({
 
 App.GameAdapter = DS.RESTAdapter.extend({
   host: 'http://localhost:8080',
-  pathForType: function(type) {
-    // Only supports find all
-    return 'collection';
-  },
 });
 
 App.Game = DS.Model.extend({
