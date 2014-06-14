@@ -43,14 +43,7 @@ App.SessionNextStepRoute = Ember.Route.extend({
 App.PlayersRoute = Ember.Route.extend({
   model: function() {
     return $.getJSON('http://localhost:8080/players').then(function(data) {
-      players = data.map(function(player) {
-        var p = {};
-        // Translate from serialized golang public fields
-        p.id = player.Id.toString();
-        p.name = player.Name
-        return p;
-      });
-      return players;
+      return data;
     });
   }
 });
