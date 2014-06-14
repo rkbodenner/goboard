@@ -66,20 +66,20 @@
   </script>
 
   <script type="text/x-handlebars" id="session">
-    <h1>Session {{id}}: {{game.name}}</h1>
-    {{#each player in players}}
-      <div class="row step">
-        <div class="col-xs-9">
-          <div class="player">
-            <h2>{{player.name}}</h2>
+    <div class="col-xs-3">
+      {{#each player in players}}
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="player">
+              <p>{{#link-to 'session.next_step' this player}}{{player.name}}{{/link-to}}</p>
+            </div>
           </div>
-          <div class="step">
-            <p>Current step</p>
-          </div>
-          <button {{action 'nextStep'}} class="btn btn-primary">Next step</button>
         </div>
-      </div>
-    {{/each}}
+      {{/each}}
+    </div>
+    <div class="col-xs-9">
+      {{outlet}}
+    </div>
   </script>
 
   <script type="text/x-handlebars" id="sessions/new">
@@ -88,6 +88,11 @@
       {{view Ember.Select content=games selection=game optionValuePath="content.id" optionLabelPath="content.name" class="form-control"}}
       <button {{action 'create'}} type="submit" class="btn btn-success">Start</button>
     </form>
+  </script>
+
+  <script type="text/x-handlebars" id="session/next_step">
+    <p>Toss the ring into Mount Doom.</p>
+    {{#link-to 'session.next_step' session this}}<button type="button" class="btn btn-primary">Next step</button>{{/link-to}}
   </script>
 
   <script type="text/x-handlebars" id="players">
