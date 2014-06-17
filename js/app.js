@@ -37,7 +37,9 @@ App.SessionsRoute = Ember.Route.extend({
 });
 
 App.SessionNextStepRoute = Ember.Route.extend({
-
+  model: function(params) {
+    return players.findBy('id', params.player_id);
+  }
 });
 
 App.PlayersRoute = Ember.Route.extend({
@@ -61,6 +63,13 @@ App.GamesController = Ember.ArrayController.extend({
 App.SessionNextStepController = Ember.ObjectController.extend({
   needs: "session",
   session: Ember.computed.alias("controllers.session"),
+
+  player: Ember.computed.alias("model"),
+
+  step: function() {
+    var session = this.get('session');
+    return session.get('setup_assignments')[this.get('player')['id']]['Rule']['Description']
+  }.property('session', 'player')
 });
 
 App.PlayerController = Ember.ObjectController.extend({
@@ -127,6 +136,7 @@ var sessions = [
 App.Session = DS.Model.extend({
   game: DS.belongsTo('game'),
   players: DS.hasMany('player', { async: true }),
+  setup_assignments: DS.attr('raw'),
   started_date: DS.attr('date'),
 });
 
@@ -139,8 +149,19 @@ App.SessionAdapter = DS.RESTAdapter.extend({
 App.SessionSerializer = DS.JSONSerializer.extend({
   normalize: function(type, hash) {
     hash["game"] = hash["Game"]["id"];
-    hash["players"] = [1, 2];
+    hash["players"] = [1, 2];  // FIXME
+    hash["setup_assignments"] = hash["SetupAssignments"];
 
     return this._super.apply(this, arguments);
   },
 });
+
+App.RawDataTransform = DS.Transform.extend({
+  deserialize: function(serialized) {
+    return serialized;
+  },
+  serialize: function(deserialized) {
+    return deserialized;
+  },
+});
+App.register("transform:raw", App.RawDataTransform);
