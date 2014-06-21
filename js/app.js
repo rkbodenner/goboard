@@ -1,7 +1,10 @@
 App = Ember.Application.create();
 
+App.MEEPLE_MOVER_URL = 'http://meeple-mover.herokuapp.com';
+//App.MEEPLE_MOVER_URL = 'http://localhost:8080';
+
 App.ApplicationAdapter = DS.RESTAdapter.extend({
-  host: 'http://localhost:8080',
+  host: App.MEEPLE_MOVER_URL,
 });
 
 App.Router.map(function() {
@@ -74,7 +77,7 @@ App.SessionStepController = Ember.ObjectController.extend({
       var player_id = this.get('player').get('id');
       return $.ajax({
         type: "PUT",
-        url: "http://localhost:8080/sessions/"+session_id+"/players/"+player_id+"/steps/"+encodeURIComponent(this.get('step')),
+        url: App.MEEPLE_MOVER_URL+"/sessions/"+session_id+"/players/"+player_id+"/steps/"+encodeURIComponent(this.get('step')),
         data: { done: true },
       });
     }
