@@ -79,6 +79,8 @@ App.SessionStepController = Ember.ObjectController.extend({
         type: "PUT",
         url: App.MEEPLE_MOVER_URL+"/sessions/"+session_id+"/players/"+player_id+"/steps/"+encodeURIComponent(this.get('step')),
         data: { done: true },
+      }).done(function() {
+        location.reload(); // FIXME: This causes the step to update by refetching the session. FFS.
       });
     }
   }
