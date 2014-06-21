@@ -71,7 +71,7 @@
         <div class="row">
           <div class="col-xs-12">
             <div class="player">
-              <p>{{#link-to 'session.next_step' this player}}{{player.name}}{{/link-to}}</p>
+              <p>{{#link-to 'session.step' this player}}{{player.name}}{{/link-to}}</p>
             </div>
           </div>
         </div>
@@ -90,9 +90,9 @@
     </form>
   </script>
 
-  <script type="text/x-handlebars" id="session/next_step">
+  <script type="text/x-handlebars" id="session/step">
     <p>{{step}}</p>
-    {{#link-to 'session.next_step' session this}}<button type="button" class="btn btn-primary">Next step</button>{{/link-to}}
+    <button {{action 'next_step'}} type="button" class="btn btn-primary">Next step</button>
   </script>
 
   <script type="text/x-handlebars" id="players">

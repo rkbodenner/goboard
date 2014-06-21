@@ -9,7 +9,7 @@ App.Router.map(function() {
   this.resource('sessions', function() {
     this.resource('session', { path: ':session_id' }, function() {
       this.resource('player', { path: '/players/:player_id' });
-      this.route('next_step', { path: '/players/:player_id/next_step'});
+      this.route('step', { path: '/players/:player_id/step'});
     });
     this.route('new');
   });
@@ -36,23 +36,21 @@ App.SessionsRoute = Ember.Route.extend({
   }
 });
 
-App.SessionNextStepRoute = Ember.Route.extend({
+App.SessionStepRoute = Ember.Route.extend({
   model: function(params) {
-    return players.findBy('id', params.player_id);
+    return this.store.find('player', params.player_id);
   }
 });
 
 App.PlayersRoute = Ember.Route.extend({
-  model: function() {
-    return $.getJSON('http://localhost:8080/players').then(function(data) {
-      return data;
-    });
+  model: function(params) {
+    return this.store.find('player');
   }
 });
 
 App.PlayerRoute = Ember.Route.extend({
   model: function(params) {
-    return players.findBy('id', params.player_id);
+    return this.store.find('player', params.player_id);
   }
 });
 
@@ -60,7 +58,7 @@ App.GamesController = Ember.ArrayController.extend({
 
 });
 
-App.SessionNextStepController = Ember.ObjectController.extend({
+App.SessionStepController = Ember.ObjectController.extend({
   needs: "session",
   session: Ember.computed.alias("controllers.session"),
 
@@ -69,7 +67,19 @@ App.SessionNextStepController = Ember.ObjectController.extend({
   step: function() {
     var session = this.get('session');
     return session.get('setup_assignments')[this.get('player')['id']]['Rule']['Description']
-  }.property('session', 'player')
+  }.property('session', 'player'),
+
+  actions: {
+    next_step: function() {
+      var session_id = this.get('session').get('id');
+      var player_id = this.get('player').get('id');
+      return $.ajax({
+        type: "PUT",
+        url: "http://localhost:8080/sessions/"+session_id+"/players/"+player_id+"/steps/"+encodeURIComponent(this.get('step')),
+        data: { done: true },
+      });
+    }
+  }
 });
 
 App.PlayerController = Ember.ObjectController.extend({
@@ -122,6 +132,17 @@ App.Player = DS.Model.extend({
 });
 
 App.Player.FIXTURES = players;
+
+App.PlayerAdapter = DS.RESTAdapter.extend({
+  host: 'http://localhost:8080',
+});
+
+// Why this is necessary is now a mystery...
+App.PlayerSerializer = DS.JSONSerializer.extend({
+  normalize: function(type, hash) {
+    return this._super.apply(this, arguments);
+  },
+});
 
 
 var sessions = [
