@@ -116,12 +116,18 @@ App.Game = DS.Model.extend({
   name: DS.attr('string'),
 });
 
+App.GameSerializer = DS.JSONSerializer.extend({
+  normalize: function(type, hash) {
+    return this._super.apply(this, arguments);
+  },
+});
+
 
 App.Player = DS.Model.extend({
   name: DS.attr('string'),
 });
 
-// Why this is necessary is now a mystery...
+// Why this is necessary is now a mystery... Same goes for Game.
 App.PlayerSerializer = DS.JSONSerializer.extend({
   normalize: function(type, hash) {
     return this._super.apply(this, arguments);
