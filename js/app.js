@@ -54,9 +54,6 @@ App.PlayerRoute = Ember.Route.extend({
   }
 });
 
-App.GamesController = Ember.ArrayController.extend({
-
-});
 
 App.SessionStepController = Ember.ObjectController.extend({
   needs: "session",
