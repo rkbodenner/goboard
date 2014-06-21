@@ -1,6 +1,8 @@
 App = Ember.Application.create();
 
-App.ApplicationAdapter = DS.FixtureAdapter.extend();
+App.ApplicationAdapter = DS.RESTAdapter.extend({
+  host: 'http://localhost:8080',
+});
 
 App.Router.map(function() {
   this.resource('games', function() {
@@ -114,24 +116,9 @@ App.Game = DS.Model.extend({
   name: DS.attr('string'),
 });
 
-App.GameAdapter = DS.RESTAdapter.extend({
-  host: 'http://localhost:8080',
-});
-
-
-var players = [
-  { id: 1, name: "Player One" },
-  { id: 2, name: "Player Two" },
-];
 
 App.Player = DS.Model.extend({
   name: DS.attr('string'),
-});
-
-App.Player.FIXTURES = players;
-
-App.PlayerAdapter = DS.RESTAdapter.extend({
-  host: 'http://localhost:8080',
 });
 
 // Why this is necessary is now a mystery...
@@ -142,26 +129,11 @@ App.PlayerSerializer = DS.JSONSerializer.extend({
 });
 
 
-var sessions = [
-  {
-    id: 1,
-    game: 1,
-    started_date: new Date(2014, 6, 6, 20, 20, 20, 0),
-    players: [ 1, 2 ],
-  }
-];
-
 App.Session = DS.Model.extend({
   game: DS.belongsTo('game'),
   players: DS.hasMany('player', { async: true }),
   setup_assignments: DS.attr('raw'),
   started_date: DS.attr('date'),
-});
-
-App.Session.FIXTURES = sessions;
-
-App.SessionAdapter = DS.RESTAdapter.extend({
-  host: 'http://localhost:8080',
 });
 
 App.SessionSerializer = DS.JSONSerializer.extend({
