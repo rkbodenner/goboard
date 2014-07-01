@@ -60,6 +60,8 @@ App.PlayerRoute = Ember.Route.extend({
 });
 
 
+App.GamesController = Ember.ArrayController.extend();
+
 App.SessionStepController = Ember.ObjectController.extend({
   needs: "session",
   session: Ember.computed.alias("controllers.session"),
@@ -105,12 +107,12 @@ App.SessionsNewController = Ember.ObjectController.extend({
 
   actions: {
     create: function() {
-      var game = this.store.find('game', this.get('game').id);
+      var game = this.get('game');
       var session = this.store.createRecord('session', {
         started_date: new Date(),
       });
       session.set('game', game);
-      session.save();
+      session.save();  // TODO: Handle errors. This is a promise.
     }
   }
 });
@@ -147,13 +149,27 @@ App.Session = DS.Model.extend({
   started_date: DS.attr('date'),
 });
 
-App.SessionSerializer = DS.JSONSerializer.extend({
-  normalize: function(type, hash) {
-    hash["game"] = hash["Game"]["id"];
-    hash["players"] = [1, 2];  // FIXME
-    hash["setup_assignments"] = hash["SetupAssignments"];
+App.SessionSerializer = DS.RESTSerializer.extend({
+  normalizePayload: function(payload) {
+    var newPayload = {};
+    newPayload.sessions = payload;
 
-    return this._super.apply(this, arguments);
+    return this._super(newPayload);
+  },
+
+  normalize: function(type, hash, prop) {
+    // Turn embedded objects into lists of IDs
+    hash["game"] = hash["Game"]["id"];
+    hash["players"] = [];
+    var i;
+    for ( i = 0; i < hash["Players"].length; i++ ) {
+      hash["players"].push(hash["Players"][i]["id"]);
+    }
+
+    hash["setup_assignments"] = hash["SetupAssignments"];
+    delete hash["SetupSteps"];  // TODO
+
+    return this._super(type, hash, prop);
   },
 });
 
