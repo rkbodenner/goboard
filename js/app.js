@@ -88,6 +88,8 @@ App.SessionStepController = Ember.ObjectController.extend({
   }
 });
 
+App.PlayersController = Ember.ArrayController.extend();
+
 App.PlayerController = Ember.ObjectController.extend({
   isEditing: false,
 
@@ -102,16 +104,21 @@ App.PlayerController = Ember.ObjectController.extend({
 });
 
 App.SessionsNewController = Ember.ObjectController.extend({
-  needs: "games",
+  needs: ["games", "players"],
   games: Ember.computed.alias("controllers.games"),
 
   actions: {
     create: function() {
       var game = this.get('game');
       var session = this.store.createRecord('session', {
+        game: game,
         started_date: new Date(),
       });
-      session.set('game', game);
+      var players = this.get("chosen_players");
+      var i;
+      for ( i = 0; i < players.length; i++ ) {
+        session.get("players").pushObject(players[i]);
+      }
       session.save();  // TODO: Handle errors. This is a promise.
     }
   }
@@ -131,6 +138,7 @@ App.GameSerializer = DS.JSONSerializer.extend({
 
 
 App.Player = DS.Model.extend({
+  sessions: DS.hasMany('session'),
   name: DS.attr('string'),
 });
 
@@ -144,7 +152,7 @@ App.PlayerSerializer = DS.JSONSerializer.extend({
 
 App.Session = DS.Model.extend({
   game: DS.belongsTo('game'),
-  players: DS.hasMany('player', { async: true }),
+  players: DS.hasMany('player'),
   setup_assignments: DS.attr('raw'),
   started_date: DS.attr('date'),
 });
