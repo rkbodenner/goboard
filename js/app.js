@@ -129,11 +129,8 @@ App.SessionsNewController = Ember.ArrayController.extend({
         game: game,
         started_date: new Date(),
       });
-      var players = this.get("chosen_players");
-      var i;
-      for ( i = 0; i < players.length; i++ ) {
-        session.get("players").pushObject(players[i]);
-      }
+      var players = this.get('chosen_players');
+      session.players = players;
       session.save();  // TODO: Handle errors. This is a promise.
     }
   }
