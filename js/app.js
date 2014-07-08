@@ -41,6 +41,22 @@ App.SessionsRoute = Ember.Route.extend({
   }
 });
 
+App.SessionsNewRoute = Ember.Route.extend({
+  model: function() {
+    return Ember.RSVP.hash({
+      games: this.store.findAll('game'),
+      players: this.store.findAll('player'),
+    });
+  },
+  setupController: function(controller, model) {
+    var games = model.games;
+    var players = model.players;
+
+    controller.set('games', games);
+    controller.set('players', players);
+  },
+});
+
 App.SessionStepRoute = Ember.Route.extend({
   model: function(params) {
     return this.store.find('player', params.player_id);
@@ -61,6 +77,8 @@ App.PlayerRoute = Ember.Route.extend({
 
 
 App.GamesController = Ember.ArrayController.extend();
+
+App.SessionController = Ember.ObjectController.extend();
 
 App.SessionStepController = Ember.ObjectController.extend({
   needs: "session",
@@ -103,10 +121,7 @@ App.PlayerController = Ember.ObjectController.extend({
   }
 });
 
-App.SessionsNewController = Ember.ObjectController.extend({
-  needs: ["games", "players"],
-  games: Ember.computed.alias("controllers.games"),
-
+App.SessionsNewController = Ember.ArrayController.extend({
   actions: {
     create: function() {
       var game = this.get('game');
