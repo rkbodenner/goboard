@@ -126,33 +126,48 @@ App.SessionsNewController = Ember.ObjectController.extend({
 
 
 App.Game = DS.Model.extend({
-  sessions: DS.hasMany('session'),
+  sessions: DS.hasMany('session', {async: true}),
+  // TODO: SetupRules
   name: DS.attr('string'),
 });
 
-App.GameSerializer = DS.JSONSerializer.extend({
-  normalize: function(type, hash) {
-    return this._super.apply(this, arguments);
+App.GameSerializer = DS.RESTSerializer.extend({
+  normalizePayload: function(payload) {
+    var newPayload = {};
+    // Collection has root property, but comes in capitalized
+    if ( typeof payload.Games != "undefined" ) {
+      newPayload.games = payload.Games;
+      delete payload.Games;
+    }
+    // Element needs root property
+    else {
+      newPayload.game = payload;
+    }
+
+    return this._super(newPayload);
   },
 });
 
 
 App.Player = DS.Model.extend({
-  sessions: DS.hasMany('session'),
+  sessions: DS.hasMany('session', {async: true}),
   name: DS.attr('string'),
 });
 
-// Why this is necessary is now a mystery... Same goes for Game.
-App.PlayerSerializer = DS.JSONSerializer.extend({
-  normalize: function(type, hash) {
-    return this._super.apply(this, arguments);
+App.PlayerSerializer = DS.RESTSerializer.extend({
+  normalizePayload: function(payload) {
+    var newPayload = {};
+    // Add root property
+    newPayload.players = payload;
+
+    return this._super(newPayload);
   },
 });
 
 
 App.Session = DS.Model.extend({
-  game: DS.belongsTo('game'),
-  players: DS.hasMany('player'),
+  game: DS.belongsTo('game', {async: true}),
+  players: DS.hasMany('player', {async: true}),
   setup_assignments: DS.attr('raw'),
   started_date: DS.attr('date'),
 });
@@ -160,6 +175,7 @@ App.Session = DS.Model.extend({
 App.SessionSerializer = DS.RESTSerializer.extend({
   normalizePayload: function(payload) {
     var newPayload = {};
+    // Add root property
     newPayload.sessions = payload;
 
     return this._super(newPayload);
