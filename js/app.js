@@ -125,12 +125,12 @@ App.SessionsNewController = Ember.ArrayController.extend({
   actions: {
     create: function() {
       var game = this.get('game');
+      var players = this.get('chosen_players');
       var session = this.store.createRecord('session', {
         game: game,
         started_date: new Date(),
       });
-      var players = this.get('chosen_players');
-      session.players = players;
+      session.get('players').set('content', players);
       session.save();  // TODO: Handle errors. This is a promise.
     }
   }
