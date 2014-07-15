@@ -23,7 +23,16 @@ App.Router.map(function() {
   });
 });
 
-App.GamesRoute = Ember.Route.extend({
+App.NavRoute = Ember.Route.extend({
+  beforeModel: function() {
+    Ember.$('div.nav-spinner').addClass('spinner');
+  },
+  afterModel: function() {
+    Ember.$('div.nav-spinner').removeClass('spinner');
+  },
+});
+
+App.GamesRoute = App.NavRoute.extend({
   model: function() {
     return this.store.find('game');
   }
@@ -35,7 +44,7 @@ App.GameRoute = Ember.Route.extend({
   }
 });
 
-App.SessionsRoute = Ember.Route.extend({
+App.SessionsRoute = App.NavRoute.extend({
   model: function() {
     return this.store.find('session');
   }
@@ -63,7 +72,7 @@ App.SessionStepRoute = Ember.Route.extend({
   }
 });
 
-App.PlayersRoute = Ember.Route.extend({
+App.PlayersRoute = App.NavRoute.extend({
   model: function(params) {
     return this.store.find('player');
   }
