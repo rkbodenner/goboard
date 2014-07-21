@@ -22,7 +22,7 @@ test("load games", function() {
   visit("/games");
 
   andThen(function() {
-    equal(find("div.game").length, 2, "Two games hard-coded");
+    equal(find("div.game").length, 2, "Two games in the DB");
   });
 });
 
@@ -30,7 +30,8 @@ test("load sessions", function() {
   visit("/sessions");
 
   andThen(function() {
-    equal(find("div.session").length, 2, "Two sessions hard-coded");
+    equal(find("a.active").text(), "Sessions");
+    equal(find("div.session").length, 0, "Zero sessions in the DB");
   });
 });
 
@@ -38,6 +39,6 @@ test("load players", function() {
   visit("/players");
 
   andThen(function() {
-    equal(find("div.player").length, 3, "Three players in the DB");
+    equal(find("div.player").length, 2, "Two players in the DB");
   });
 });
