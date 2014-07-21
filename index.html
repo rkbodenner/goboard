@@ -28,6 +28,9 @@
         </li>
       </ul>
     </nav>
+    <div id="error-banner" class="hidden">
+      <p class="bg-danger"></p>
+    </div>
     {{outlet}}
   </script>
 
@@ -53,6 +56,7 @@
   <script type="text/x-handlebars" id="game">
     {{#link-to 'sessions.new'}}<button type="button" class="btn btn-primary">New session</button>{{/link-to}}
     <h1>{{name}}</h1>
+    <h2>{{numPlayers this}}</h2>
   </script>
 
   <script type="text/x-handlebars" id="sessions">

@@ -26,6 +26,8 @@ App.Router.map(function() {
 App.NavRoute = Ember.Route.extend({
   beforeModel: function() {
     Ember.$('div.nav-spinner').addClass('spinner');
+    Ember.$('#error-banner').removeClass('show');
+    Ember.$('#error-banner').addClass('hidden');
   },
   afterModel: function() {
     Ember.$('div.nav-spinner').removeClass('spinner');
@@ -47,6 +49,12 @@ App.GameRoute = Ember.Route.extend({
 App.SessionsRoute = App.NavRoute.extend({
   model: function() {
     return this.store.find('session');
+  }
+});
+
+App.SessionRoute = App.NavRoute.extend({
+  model: function(params) {
+    return this.store.find('session', params.session_id);
   }
 });
 
@@ -87,6 +95,17 @@ App.PlayerRoute = Ember.Route.extend({
 
 App.GamesController = Ember.ArrayController.extend();
 
+App.GamesController.numPlayersFunc = function(game) {
+  var min = game.get('min_players');
+  var max = game.get('max_players');
+  if ( min == max ) {
+    return "" + min + " players";
+  }
+  return "" + min + "-" + max + " players";
+};
+
+Ember.Handlebars.helper('numPlayers', App.GamesController.numPlayersFunc, 'min_players', 'max_players');
+
 App.SessionController = Ember.ObjectController.extend();
 
 App.SessionStepController = Ember.ObjectController.extend({
@@ -110,6 +129,7 @@ App.SessionStepController = Ember.ObjectController.extend({
         data: { done: true },
       }).done(function() {
         location.reload(); // FIXME: This causes the step to update by refetching the session. FFS.
+        // self.get('session').reload() doesn't work (when self is assigned this before the return)
       });
     }
   }
@@ -133,8 +153,19 @@ App.PlayerController = Ember.ObjectController.extend({
 App.SessionsNewController = Ember.ArrayController.extend({
   actions: {
     create: function() {
+      Ember.$('#error-banner').removeClass('show');
+      Ember.$('#error-banner').addClass('hidden');
+
       var game = this.get('game');
       var players = this.get('chosen_players');
+
+      if ( game.get('min_players') > players.length || players.length > game.get('max_players') ) {
+        Ember.$('#error-banner > p').text(""+game.get("name")+" supports "+App.GamesController.numPlayersFunc(game));
+        Ember.$('#error-banner').addClass("show");
+        Ember.$('#error-banner').removeClass("hidden");
+        return;
+      }
+
       var session = this.store.createRecord('session', {
         game: game,
         started_date: new Date(),
@@ -150,6 +181,8 @@ App.Game = DS.Model.extend({
   sessions: DS.hasMany('session', {async: true}),
   // TODO: SetupRules
   name: DS.attr('string'),
+  min_players: DS.attr('number'),
+  max_players: DS.attr('number'),
 });
 
 App.GameSerializer = DS.RESTSerializer.extend({
