@@ -121,6 +121,10 @@
             </p>
           </div>
           {{/each}}
+          <form class="form">
+            {{input type="text" value=name placeholder="Name" action="create"}}
+            <button {{action 'create'}} type="submit" class="btn btn-success">+</button>
+          </form>
         </div>
         <div class="col-xs-9">
           {{outlet}}

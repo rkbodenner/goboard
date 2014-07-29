@@ -140,7 +140,27 @@ App.SessionStepController = Ember.ObjectController.extend({
   }
 });
 
-App.PlayersController = Ember.ArrayController.extend();
+App.PlayersController = Ember.ArrayController.extend({
+  actions: {
+    create: function() {
+      Ember.$('#error-banner').removeClass('show');
+      Ember.$('#error-banner').addClass('hidden');
+
+      var player = this.store.createRecord('player', {
+        name: this.get('name')
+      });
+      var self = this;
+      player.save().then(function() {
+        self.set('name', '');
+      }, function() {
+        Ember.$('#error-banner > p').text("Could not create player named "+player.get('name'));
+        Ember.$('#error-banner').addClass("show");
+        Ember.$('#error-banner').removeClass("hidden");
+        self.store.deleteRecord(player);
+      });
+    }
+  }
+});
 
 App.PlayerController = Ember.ObjectController.extend({
   isEditing: false,
