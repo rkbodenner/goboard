@@ -14,6 +14,20 @@
   padding: 0.75em;
 }
 
+div.session.berserker {
+  background-color: #dddddd;
+  border-color: #e7e7e7;
+  border-radius: 4px;
+  border: 1px solid;
+}
+
+div.session.berserker > p {
+  margin-bottom: 0px;
+  padding-top: 8px;
+  padding-left: 12px;
+  padding-bottom: 8px;
+}
+
 /* from http://tobiasahlin.com/spinkit/ */
 
 .spinner {

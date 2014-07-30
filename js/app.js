@@ -31,6 +31,8 @@ App.NavRoute = Ember.Route.extend({
   },
   afterModel: function() {
     Ember.$('div.nav-spinner').removeClass('spinner');
+
+    Ember.$('div.session').removeClass('hidden').addClass('show').removeClass('berserker');
   },
 });
 
@@ -49,12 +51,28 @@ App.GameRoute = Ember.Route.extend({
 App.SessionsRoute = App.NavRoute.extend({
   model: function() {
     return this.store.find('session');
+  },
+  actions: {
+    willTransition: function(transition) {
+      if ( "sessions.index" === transition.intent.name ) {
+        Ember.$('div.session').removeClass('hidden').addClass('show').removeClass('berserker');
+      }
+      return true;
+    }
   }
 });
 
 App.SessionRoute = App.NavRoute.extend({
   model: function(params) {
     return this.store.find('session', params.session_id);
+  },
+  afterModel: function(session) {
+    this._super(session);
+
+    Ember.$('div.session').removeClass('show').addClass('hidden').removeClass('berserker');
+    Ember.$('#session-' + session.id).addClass('berserker').removeClass('hidden').addClass('show');
+
+    return null;
   }
 });
 
@@ -103,10 +121,15 @@ App.GamesController.numPlayersFunc = function(game) {
   }
   return "" + min + "-" + max + " players";
 };
-
 Ember.Handlebars.helper('numPlayers', App.GamesController.numPlayersFunc, 'min_players', 'max_players');
 
 App.SessionController = Ember.ObjectController.extend();
+
+App.SessionController.sessionDivIdFunc = function(session) {
+  var id = Handlebars.Utils.escapeExpression(session.id);
+  return new Ember.Handlebars.SafeString('<div class="session" id="session-' + id + '">');
+};
+Ember.Handlebars.helper('sessionDivId', App.SessionController.sessionDivIdFunc, 'id');
 
 App.SessionStepController = Ember.ObjectController.extend({
   needs: "session",

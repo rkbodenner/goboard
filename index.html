@@ -62,16 +62,18 @@
   <script type="text/x-handlebars" id="sessions">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-xs-3">
+        <div class="col-xs-12">
           {{#each}}
-          <div class="session">
+          {{sessionDivId this}}
             <p>
               {{#link-to 'session' this}}{{id}}: {{game.name}}{{/link-to}}
             </p>
           </div>
           {{/each}}
         </div>
-        <div class="col-xs-9">
+      </div> <!-- row -->
+      <div class="row">
+        <div class="col-xs-12">
           {{outlet}}
         </div>
       </div> <!-- row -->
