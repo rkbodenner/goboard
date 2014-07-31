@@ -69,6 +69,9 @@ App.SessionRoute = App.NavRoute.extend({
   afterModel: function(session) {
     this._super(session);
 
+    // FIXME: Styles not applied when URL is navigated to directly. This hook fires,
+    // but the divs are not rendered yet.
+    // Perhaps this helps? http://madhatted.com/2013/6/8/lifecycle-hooks-in-ember-js-views
     Ember.$('div.session').removeClass('show').addClass('hidden').removeClass('berserker');
     Ember.$('#session-' + session.id).addClass('berserker').removeClass('hidden').addClass('show');
 
