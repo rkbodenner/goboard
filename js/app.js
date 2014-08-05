@@ -222,7 +222,12 @@ App.SessionsNewController = Ember.ArrayController.extend({
         started_date: new Date(),
       });
       session.get('players').set('content', players);
-      session.save();  // TODO: Handle errors. This is a promise.
+      var self = this;
+      session.save().then(function() {
+        // TODO: Show a banner when we land announcing the new session
+        // FIXME: Show the collapsed nav for the session when we land
+        self.transitionToRoute('session', session);
+      });  // TODO: Handle errors. This is a promise.
     }
   }
 });
