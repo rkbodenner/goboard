@@ -64,16 +64,6 @@ App.SessionRoute = App.NavRoute.extend({
   model: function(params) {
     return this.store.find('session', params.session_id);
   },
-  afterModel: function(session) {
-    this._super(session);
-
-    // FIXME: Styles not applied when URL is navigated to directly. This hook fires,
-    // but the divs are not rendered yet.
-    // Perhaps this helps? http://madhatted.com/2013/6/8/lifecycle-hooks-in-ember-js-views
-    App.helpers.focusOneSession(session.id);
-
-    return null;
-  }
 });
 
 App.SessionsNewRoute = Ember.Route.extend({
@@ -129,6 +119,25 @@ App.helpers = {
 };
 
 
+App.SessionDetailView = Ember.View.extend({
+  templateName: 'session-detail',
+  didInsertElement: function() {
+    // FIXME: This is probably triggering with every session rendered, but really only need it after the whole session list is rendered
+    // Put this whole mess in a view for the session list.
+    this.scheduleCollapse();
+  },
+  scheduleCollapse: function() {
+    Ember.run.scheduleOnce('afterRender', this, this.collapse);
+  },
+  collapse: function() {
+    var session = this.get('controller.controllers.session.model');
+    if ( typeof session != "undefined" && session != null ) {
+      App.helpers.focusOneSession(session.id);
+    }
+  }
+});
+
+
 App.GamesController = Ember.ArrayController.extend();
 
 App.GamesController.numPlayersFunc = function(game) {
@@ -148,6 +157,26 @@ App.SessionController.sessionDivIdFunc = function(session) {
   return new Ember.Handlebars.SafeString('<div class="session" id="session-' + id + '">');
 };
 Ember.Handlebars.helper('sessionDivId', App.SessionController.sessionDivIdFunc, 'id');
+
+App.SessionsController = Ember.ArrayController.extend({
+  // Wow. Such hack.
+  //
+  // In displaying one session, first the session list is rendered. Then we hide
+  // all but the specified session, which is then displayed as a sort of breadcrumb navbar.
+  //
+  // Transitions between any route and the session route, once all sessions are rendered, would
+  // suffice to do this "collapsed nav" effect, via afterModel hooks and willTransition, but
+  // when directly navigating to a session, the session list divs aren't rendered yet when
+  // afterModel fires, so they can't be hidden or focused.
+  //
+  // So we resort to scheduling the collapse with Ember's render pipeline (see scheduleCollapse).
+  // To reference the selected session, the sessions controller (rendering the list) needs to know
+  // from the session controller what session is requested.
+  // Reference: http://madhatted.com/2013/6/8/lifecycle-hooks-in-ember-js-views
+  //
+  // And that is why this controller...
+  needs: ['session'],
+});
 
 App.SessionStepController = Ember.ObjectController.extend({
   needs: "session",
