@@ -274,7 +274,6 @@ App.SessionsNewController = Ember.ArrayController.extend({
 
 App.Game = DS.Model.extend({
   sessions: DS.hasMany('session', {async: true}),
-  // TODO: SetupRules
   name: DS.attr('string'),
   min_players: DS.attr('number'),
   max_players: DS.attr('number'),
@@ -340,7 +339,7 @@ App.SessionSerializer = DS.RESTSerializer.extend({
     }
 
     hash["setup_assignments"] = hash["SetupAssignments"];
-    delete hash["SetupSteps"];  // TODO
+    delete hash["SetupSteps"];  // Don't need them, just the assignments
 
     return this._super(type, hash, prop);
   },
