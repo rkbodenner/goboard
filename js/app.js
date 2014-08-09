@@ -26,8 +26,7 @@ App.Router.map(function() {
 App.NavRoute = Ember.Route.extend({
   beforeModel: function() {
     Ember.$('div.nav-spinner').addClass('spinner');
-    Ember.$('#error-banner').removeClass('show');
-    Ember.$('#error-banner').addClass('hidden');
+    App.helpers.hideErrorBanner();
   },
   afterModel: function() {
     Ember.$('div.nav-spinner').removeClass('spinner');
@@ -114,6 +113,17 @@ App.PlayerRoute = Ember.Route.extend({
 });
 
 
+App.helpers = {
+  hideErrorBanner: function() {
+    Ember.$('#error-banner').removeClass("show").addClass("hidden");
+  },
+  showErrorBanner: function(msg) {
+    Ember.$('#error-banner > p').text(msg);
+    Ember.$('#error-banner').addClass("show").removeClass("hidden");
+  },
+};
+
+
 App.GamesController = Ember.ArrayController.extend();
 
 App.GamesController.numPlayersFunc = function(game) {
@@ -169,8 +179,7 @@ App.SessionStepController = Ember.ObjectController.extend({
 App.PlayersController = Ember.ArrayController.extend({
   actions: {
     create: function() {
-      Ember.$('#error-banner').removeClass('show');
-      Ember.$('#error-banner').addClass('hidden');
+      App.helpers.hideErrorBanner();
 
       var player = this.store.createRecord('player', {
         name: this.get('name')
@@ -179,9 +188,8 @@ App.PlayersController = Ember.ArrayController.extend({
       player.save().then(function() {
         self.set('name', '');
       }, function() {
-        Ember.$('#error-banner > p').text("Could not create player named "+player.get('name'));
-        Ember.$('#error-banner').addClass("show");
-        Ember.$('#error-banner').removeClass("hidden");
+        App.helpers.showErrorBanner("Could not create player named "+player.get('name'));
+
         self.store.deleteRecord(player);
       });
     }
@@ -204,16 +212,13 @@ App.PlayerController = Ember.ObjectController.extend({
 App.SessionsNewController = Ember.ArrayController.extend({
   actions: {
     create: function() {
-      Ember.$('#error-banner').removeClass('show');
-      Ember.$('#error-banner').addClass('hidden');
+      App.helpers.hideErrorBanner();
 
       var game = this.get('game');
       var players = this.get('chosen_players');
 
       if ( game.get('min_players') > players.length || players.length > game.get('max_players') ) {
-        Ember.$('#error-banner > p').text(""+game.get("name")+" supports "+App.GamesController.numPlayersFunc(game));
-        Ember.$('#error-banner').addClass("show");
-        Ember.$('#error-banner').removeClass("hidden");
+        App.helpers.showErrorBanner(""+game.get("name")+" supports "+App.GamesController.numPlayersFunc(game));
         return;
       }
 
