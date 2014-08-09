@@ -30,8 +30,7 @@ App.NavRoute = Ember.Route.extend({
   },
   afterModel: function() {
     Ember.$('div.nav-spinner').removeClass('spinner');
-
-    Ember.$('div.session').removeClass('hidden').addClass('show').removeClass('berserker');
+    App.helpers.revealAllSessions();
   },
 });
 
@@ -54,7 +53,7 @@ App.SessionsRoute = App.NavRoute.extend({
   actions: {
     willTransition: function(transition) {
       if ( "sessions.index" === transition.intent.name ) {
-        Ember.$('div.session').removeClass('hidden').addClass('show').removeClass('berserker');
+        App.helpers.revealAllSessions();
       }
       return true;
     }
@@ -71,8 +70,7 @@ App.SessionRoute = App.NavRoute.extend({
     // FIXME: Styles not applied when URL is navigated to directly. This hook fires,
     // but the divs are not rendered yet.
     // Perhaps this helps? http://madhatted.com/2013/6/8/lifecycle-hooks-in-ember-js-views
-    Ember.$('div.session').removeClass('show').addClass('hidden').removeClass('berserker');
-    Ember.$('#session-' + session.id).addClass('berserker').removeClass('hidden').addClass('show');
+    App.helpers.focusOneSession(session.id);
 
     return null;
   }
@@ -115,11 +113,18 @@ App.PlayerRoute = Ember.Route.extend({
 
 App.helpers = {
   hideErrorBanner: function() {
-    Ember.$('#error-banner').removeClass("show").addClass("hidden");
+    Ember.$('#error-banner').removeClass('show').addClass('hidden');
   },
   showErrorBanner: function(msg) {
     Ember.$('#error-banner > p').text(msg);
-    Ember.$('#error-banner').addClass("show").removeClass("hidden");
+    Ember.$('#error-banner').addClass('show').removeClass('hidden');
+  },
+  revealAllSessions: function() {
+    Ember.$('div.session').removeClass('hidden').addClass('show').removeClass('berserker');
+  },
+  focusOneSession: function(sessionId) {
+    Ember.$('div.session').removeClass('show').addClass('hidden').removeClass('berserker');
+    Ember.$('#session-' + sessionId).addClass('berserker').removeClass('hidden').addClass('show');
   },
 };
 
