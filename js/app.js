@@ -129,24 +129,24 @@ App.helpers = {
 };
 
 
-App.GamesController = Ember.ArrayController.extend();
-
-App.GamesController.numPlayersFunc = function(game) {
-  var min = game.get('min_players');
-  var max = game.get('max_players');
-  if ( min == max ) {
-    return "" + min + " players";
-  }
-  return "" + min + "-" + max + " players";
-};
+App.GamesController = Ember.ArrayController.extend(
+  numPlayersFunc: function(game) {
+    var min = game.get('min_players');
+    var max = game.get('max_players');
+    if ( min == max ) {
+      return "" + min + " players";
+    }
+    return "" + min + "-" + max + " players";
+  },
+);
 Ember.Handlebars.helper('numPlayers', App.GamesController.numPlayersFunc, 'min_players', 'max_players');
 
-App.SessionController = Ember.ObjectController.extend();
-
-App.SessionController.sessionDivIdFunc = function(session) {
-  var id = Handlebars.Utils.escapeExpression(session.id);
-  return new Ember.Handlebars.SafeString('<div class="session" id="session-' + id + '">');
-};
+App.SessionController = Ember.ObjectController.extend(
+  sessionDivIdFunc: function(session) {
+    var id = Handlebars.Utils.escapeExpression(session.id);
+    return new Ember.Handlebars.SafeString('<div class="session" id="session-' + id + '">');
+  },
+);
 Ember.Handlebars.helper('sessionDivId', App.SessionController.sessionDivIdFunc, 'id');
 
 App.SessionStepController = Ember.ObjectController.extend({
