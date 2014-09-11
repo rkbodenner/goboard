@@ -25,11 +25,11 @@ var jsonGame = {
   name: "Tic-Tac-Toe",
   SetupRules: [
     {
-    Id: 1,
-    Description: "Draw 3x3 grid",
-    Details: "",
-    Arity: "Once",
-    Dependencies: null
+      Id: 1,
+      Description: "Draw 3x3 grid",
+      Details: "",
+      Arity: "Once",
+      Dependencies: null
     },
     {
       Id: 2,
@@ -54,6 +54,31 @@ var jsonPlayers = [
   }
 ];
 
+var jsonSessions = [
+  {
+    id: 131,
+    Game: jsonGame,
+    Players: jsonPlayers,
+    SetupAssignments: {
+      1: {
+        Rule: {
+          Id: 2,
+          Description: "Choose X or O",
+          Details: "",
+          Arity: "Each player",
+          Dependencies: null
+        },
+        Owner: {
+          id: 1,
+          name: "Player One"
+        },
+        Done: true
+      }
+    },
+    SetupSteps: [],
+  },
+];
+
 // Tests
 
 test("load games", function() {
@@ -72,35 +97,10 @@ test("load games", function() {
 });
 
 test("load sessions", function() {
-  var json = [
-    {
-      id: 131,
-      Game: jsonGame,
-      Players: jsonPlayers,
-      SetupAssignments: {
-        1: {
-          Rule: {
-            Id: 2,
-            Description: "Choose X or O",
-            Details: "",
-            Arity: "Each player",
-            Dependencies: null
-          },
-          Owner: {
-            id: 1,
-            name: "Player One"
-          },
-          Done: true
-        }
-      },
-      SetupSteps: [],
-    },
-  ];
-
   $.mockjax({
     url: 'http://localhost:8080/sessions',
     dataType: 'json',
-    responseText: json,
+    responseText: jsonSessions,
   });
 
   $.mockjax({
@@ -114,6 +114,78 @@ test("load sessions", function() {
   andThen(function() {
     equal(find("a.active").text(), "Sessions");
     equal(find("div.session").length, 1, "One session");
+  });
+});
+
+test("load session", function() {
+  $.mockjax({
+    url: 'http://localhost:8080/sessions',
+    dataType: 'json',
+    responseText: jsonSessions,
+  });
+
+  $.mockjax({
+    url: 'http://localhost:8080/games/1',
+    dataType: 'json',
+    responseText: jsonGame,
+  });
+
+  $.mockjax({
+    url: 'http://localhost:8080/players/1',
+    dataType: 'json',
+    responseText: jsonPlayers[0],
+  });
+
+  $.mockjax({
+    url: 'http://localhost:8080/players/2',
+    dataType: 'json',
+    responseText: jsonPlayers[1],
+  });
+
+  visit("/sessions/131");
+
+  andThen(function() {
+    equal(find("ul.nav > li > a.active").text(), "Sessions");
+    equal(find("div.session > p > a.active").text(), "131: Tic-Tac-Toe");
+    equal(find("div.session").length, 1, "One session");
+    equal(find("div.player").length, 2, "Two players");
+  });
+});
+
+test("show player step", function() {
+  $.mockjax({
+    url: 'http://localhost:8080/sessions',
+    dataType: 'json',
+    responseText: jsonSessions,
+  });
+
+  $.mockjax({
+    url: 'http://localhost:8080/games/1',
+    dataType: 'json',
+    responseText: jsonGame,
+  });
+
+  $.mockjax({
+    url: 'http://localhost:8080/players/1',
+    dataType: 'json',
+    responseText: jsonPlayers[0],
+  });
+
+  $.mockjax({
+    url: 'http://localhost:8080/players/2',
+    dataType: 'json',
+    responseText: jsonPlayers[1],
+  });
+
+  visit("/sessions/131/players/1/step");
+
+  andThen(function() {
+    equal(find("ul.nav > li > a.active").text(), "Sessions");
+    equal(find("div.session > p > a.active").text(), "131: Tic-Tac-Toe");
+    equal(find("div.player > p > a.active").text(), "Player One");
+    equal(find("button").text(), "Next step");
+    equal(find("div.session").length, 1, "One session");
+    equal(find("div.player").length, 2, "Two players");
   });
 });
 
