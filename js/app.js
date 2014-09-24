@@ -223,7 +223,6 @@ App.SessionsNewController = Ember.ArrayController.extend({
       var self = this;
       session.save().then(function() {
         // TODO: Show a banner when we land announcing the new session
-        // FIXME: Show the collapsed nav for the session when we land
         self.transitionToRoute('session', session);
       });  // TODO: Handle errors. This is a promise.
     }
