@@ -60,3 +60,5 @@ bootstrap-3.2.0/less/utilities.less
 bootstrap-3.2.0/less/wells.less
 bootstrap-3.2.0/package.json
 bootstrap-3.2.0/test-infra/
+bower_components/
+node_modules/
