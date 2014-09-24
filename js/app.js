@@ -11,9 +11,8 @@ App.Router.map(function() {
   this.resource('games', function() {
     this.resource('game', { path: ':game_id' });
   });
-  this.resource('sessions', function() {
-    this.route('new');
-  });
+  this.resource('sessions');
+  this.route('sessions.new', { path: '/sessions/new' });
   this.resource('session', { path: '/sessions/:session_id' }, function() {
     this.route('step', { path: '/players/:player_id/step'});
   });
