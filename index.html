@@ -104,8 +104,8 @@
   <script type="text/x-handlebars" id="sessions/new">
     <h1>Let's play a game.</h1><!--'-->
     <form class="form-inline">
-      {{view Ember.Select content=games selection=game optionValuePath="content.id" optionLabelPath="content.name" class="form-control"}}
-      {{view Ember.Select content=players selection=chosen_players multiple="multiple" optionValuePath="content.id" optionLabelPath="content.name" class="form-control"}}
+      {{view Ember.Select content=games selection=game optionValuePath="content.id" optionLabelPath="content.name" class="form-control game"}}
+      {{view Ember.Select content=players selection=chosen_players multiple="multiple" optionValuePath="content.id" optionLabelPath="content.name" class="form-control players"}}
       <button {{action 'create'}} type="submit" class="btn btn-success">Start</button>
     </form>
   </script>

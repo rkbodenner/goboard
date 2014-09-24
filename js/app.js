@@ -260,7 +260,13 @@ App.SessionsNewController = Ember.ArrayController.extend({
         game: game,
         started_date: new Date(),
       });
+      // Without both setting the game attribute and this, the game ID isn't serialized in the request.
+      // But the integration test passes without setting the attribute above. Huh.
+      session.get('game').set('content', game);
+      // Welp. If I set the attribute (like I do with 'game'), I get:
+      // "Uncaught Error: Cannot set read-only property "players" on object: <App.Session:ember629:null>"
       session.get('players').set('content', players);
+
       var self = this;
       session.save().then(function() {
         // TODO: Show a banner when we land announcing the new session

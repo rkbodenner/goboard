@@ -203,3 +203,41 @@ test("load players", function() {
     equal(find("div.player").length, 2, "Two players");
   });
 });
+
+test("create new session", function() {
+  $.mockjax({
+    url: 'http://localhost:8080/sessions',
+    dataType: 'json',
+    responseText: jsonSessions,
+  });
+
+  $.mockjax({
+    url: 'http://localhost:8080/games',
+    dataType: 'json',
+    responseText: [jsonGame],
+  });
+
+  $.mockjax({
+    url: 'http://localhost:8080/players',
+    dataType: 'json',
+    responseText: jsonPlayers,
+  });
+
+  $.mockjax({
+    url: 'http://localhost:8080/sessions',
+    type: 'POST',
+    dataType: 'json',
+    response: function(settings) {
+      this.responseText = jsonSessions[0];
+      this.status = 201;
+    }
+  });
+
+  visit("/sessions/new");
+  fillIn("select.players", [jsonPlayers[0].id, jsonPlayers[1].id]);
+  click("button.btn-success");
+
+  andThen(function() {
+    equal(currentRouteName(), "session.index");
+  });
+});
