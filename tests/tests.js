@@ -145,7 +145,6 @@ test("load session", function() {
   visit("/sessions/131");
 
   andThen(function() {
-    equal(find("ul.nav > li > a.active").text(), "Sessions");
     equal(find("div.session > p > a.active").text(), "131: Tic-Tac-Toe");
     equal(find("div.session").length, 1, "One session");
     equal(find("div.player").length, 2, "Two players");
@@ -180,7 +179,6 @@ test("show player step", function() {
   visit("/sessions/131/players/1/step");
 
   andThen(function() {
-    equal(find("ul.nav > li > a.active").text(), "Sessions");
     equal(find("div.session > p > a.active").text(), "131: Tic-Tac-Toe");
     equal(find("div.player > p > a.active").text(), "Player One");
     equal(find("button").text(), "Next step");
