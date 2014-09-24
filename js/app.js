@@ -12,11 +12,10 @@ App.Router.map(function() {
     this.resource('game', { path: ':game_id' });
   });
   this.resource('sessions', function() {
-    this.resource('session', { path: ':session_id' }, function() {
-      this.resource('player', { path: '/players/:player_id' });
-      this.route('step', { path: '/players/:player_id/step'});
-    });
     this.route('new');
+  });
+  this.resource('session', { path: '/sessions/:session_id' }, function() {
+    this.route('step', { path: '/players/:player_id/step'});
   });
   this.resource('players', function() {
     this.resource('player', { path: ':player_id' });
@@ -30,7 +29,6 @@ App.NavRoute = Ember.Route.extend({
   },
   afterModel: function() {
     Ember.$('div.nav-spinner').removeClass('spinner');
-    App.helpers.revealAllSessions();
   },
 });
 
@@ -50,14 +48,6 @@ App.SessionsRoute = App.NavRoute.extend({
   model: function() {
     return this.store.find('session');
   },
-  actions: {
-    willTransition: function(transition) {
-      if ( "sessions.index" === transition.intent.name ) {
-        App.helpers.revealAllSessions();
-      }
-      return true;
-    }
-  }
 });
 
 App.SessionRoute = App.NavRoute.extend({
@@ -109,32 +99,11 @@ App.helpers = {
     Ember.$('#error-banner > p').text(msg);
     Ember.$('#error-banner').addClass('show').removeClass('hidden');
   },
-  revealAllSessions: function() {
-    Ember.$('div.session').removeClass('hidden').addClass('show').removeClass('berserker');
-  },
-  focusOneSession: function(sessionId) {
-    Ember.$('div.session').removeClass('show').addClass('hidden').removeClass('berserker');
-    Ember.$('#session-' + sessionId).addClass('berserker').removeClass('hidden').addClass('show');
-  },
 };
 
 
 App.SessionDetailView = Ember.View.extend({
   templateName: 'session-detail',
-  didInsertElement: function() {
-    // FIXME: This is probably triggering with every session rendered, but really only need it after the whole session list is rendered
-    // Put this whole mess in a view for the session list.
-    this.scheduleCollapse();
-  },
-  scheduleCollapse: function() {
-    Ember.run.scheduleOnce('afterRender', this, this.collapse);
-  },
-  collapse: function() {
-    var session = this.get('controller.controllers.session.model');
-    if ( typeof session != "undefined" && session != null ) {
-      App.helpers.focusOneSession(session.id);
-    }
-  }
 });
 
 
@@ -150,6 +119,7 @@ App.GamesController.numPlayersFunc = function(game) {
 };
 Ember.Handlebars.helper('numPlayers', App.GamesController.numPlayersFunc, 'min_players', 'max_players');
 
+
 App.SessionController = Ember.ObjectController.extend();
 
 App.SessionController.sessionDivIdFunc = function(session) {
@@ -158,25 +128,9 @@ App.SessionController.sessionDivIdFunc = function(session) {
 };
 Ember.Handlebars.helper('sessionDivId', App.SessionController.sessionDivIdFunc, 'id');
 
-App.SessionsController = Ember.ArrayController.extend({
-  // Wow. Such hack.
-  //
-  // In displaying one session, first the session list is rendered. Then we hide
-  // all but the specified session, which is then displayed as a sort of breadcrumb navbar.
-  //
-  // Transitions between any route and the session route, once all sessions are rendered, would
-  // suffice to do this "collapsed nav" effect, via afterModel hooks and willTransition, but
-  // when directly navigating to a session, the session list divs aren't rendered yet when
-  // afterModel fires, so they can't be hidden or focused.
-  //
-  // So we resort to scheduling the collapse with Ember's render pipeline (see scheduleCollapse).
-  // To reference the selected session, the sessions controller (rendering the list) needs to know
-  // from the session controller what session is requested.
-  // Reference: http://madhatted.com/2013/6/8/lifecycle-hooks-in-ember-js-views
-  //
-  // And that is why this controller...
-  needs: ['session'],
-});
+
+App.SessionsController = Ember.ArrayController.extend();
+
 
 App.SessionStepController = Ember.ObjectController.extend({
   needs: "session",

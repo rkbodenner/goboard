@@ -85,19 +85,28 @@
   </script>
 
   <script type="text/x-handlebars" id="session">
-    <div class="col-xs-3">
-      {{#each player in players}}
-        <div class="row">
-          <div class="col-xs-12">
-            <div class="player">
-              <p>{{#link-to 'session.step' this player}}{{player.name}}{{/link-to}}</p>
-            </div>
-          </div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12">
+          {{view App.SessionDetailView}}
         </div>
-      {{/each}}
-    </div>
-    <div class="col-xs-9">
-      {{outlet}}
+      </div>
+      <div class="row">
+        <div class="col-xs-3">
+          {{#each player in players}}
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="player">
+                  <p>{{#link-to 'session.step' this player}}{{player.name}}{{/link-to}}</p>
+                </div>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+        <div class="col-xs-9">
+          {{outlet}}
+        </div>
+      </div>
     </div>
   </script>
 
