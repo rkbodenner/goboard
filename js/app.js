@@ -275,7 +275,14 @@ App.Session = DS.Model.extend({
   game: DS.belongsTo('game', {async: true}),
   players: DS.hasMany('player', {async: true}),
   setup_assignments: DS.attr('raw'),
+  setup_steps: DS.attr('raw'),
   started_date: DS.attr('date'),
+
+  undoneStepCount: function() {
+    return this.get('setup_steps').reduce(function(prev, curr) {
+      return prev + (curr.Done === true ? 0 : 1);
+    }, 0);
+  }.property('setup_steps'),
 });
 
 App.SessionSerializer = DS.RESTSerializer.extend({
@@ -297,7 +304,7 @@ App.SessionSerializer = DS.RESTSerializer.extend({
     }
 
     hash["setup_assignments"] = hash["SetupAssignments"];
-    delete hash["SetupSteps"];  // Don't need them, just the assignments
+    hash["setup_steps"] = hash["SetupSteps"];
 
     return this._super(type, hash, prop);
   },

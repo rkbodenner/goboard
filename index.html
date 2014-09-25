@@ -78,7 +78,7 @@
   <script type="text/x-handlebars" id="session-detail">
     {{sessionDivId this}}
       <p>
-        {{#link-to 'session' this}}{{id}}: {{game.name}}{{/link-to}}
+        {{#link-to 'session' this}}{{id}}: {{game.name}}{{/link-to}} ({{this.undoneStepCount}})
       </p>
     </div>
   </script>

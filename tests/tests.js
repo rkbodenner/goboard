@@ -5,19 +5,6 @@ App.rootElement = '#ember-testing';
 App.setupForTesting();
 App.injectTestHelpers();
 
-// common QUnit module declaration
-module("Integration tests", {
-  setup: function() {
-    // before each test, ensure the application is ready to run.
-    Ember.run(App, App.advanceReadiness);
-  },
-
-  teardown: function() {
-    // reset the application state between each test
-    App.reset();
-  }
-});
-
 // Fixtures
 
 var jsonGame = {
@@ -79,7 +66,35 @@ var jsonSessions = [
   },
 ];
 
-// Tests
+// Unit tests
+
+emq.globalize();
+setResolver(Ember.DefaultResolver.create({ namespace: App }));
+
+moduleForModel("session", "Session model", {
+  needs: ['model:game', 'model:player']
+});
+
+test('undoneStepCount', function() {
+  var session = this.subject({
+    setup_steps: [{Done: false}, {Done: false}, {Done: true}],
+  });
+
+  equal(session.get('undoneStepCount'), 2);
+});
+
+
+module("Integration tests", {
+  setup: function() {
+    // before each test, ensure the application is ready to run.
+    Ember.run(App, App.advanceReadiness);
+  },
+
+  teardown: function() {
+    // reset the application state between each test
+    App.reset();
+  }
+});
 
 test("load games", function() {
   var json = [jsonGame];
