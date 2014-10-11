@@ -274,8 +274,8 @@ App.PlayerSerializer = DS.RESTSerializer.extend({
 App.Session = DS.Model.extend({
   game: DS.belongsTo('game', {async: true}),
   players: DS.hasMany('player', {async: true}),
-  setup_assignments: DS.attr('raw'),
-  setup_steps: DS.attr('raw'),
+  setup_assignments: DS.attr('rawData'),
+  setup_steps: DS.attr('rawData'),
   started_date: DS.attr('date'),
 
   undoneStepCount: function() {
@@ -318,4 +318,4 @@ App.RawDataTransform = DS.Transform.extend({
     return deserialized;
   },
 });
-App.register("transform:raw", App.RawDataTransform);
+App.register("transform:rawData", App.RawDataTransform);
