@@ -17,6 +17,7 @@
     "tests"
   ],
   "devDependencies": {
-    "jquery-mockjax": "appendto/jquery-mockjax#~1.5.4"
+    "jquery-mockjax": "appendto/jquery-mockjax#~1.5.4",
+    "qunit": "~1.15.0"
   }
 }
