@@ -132,11 +132,12 @@ test("load sessions", function() {
   });
 });
 
+//FAILS
 test("load session", function() {
   $.mockjax({
-    url: 'http://localhost:8080/sessions',
+    url: 'http://localhost:8080/sessions/131',
     dataType: 'json',
-    responseText: jsonSessions,
+    responseText: jsonSessions[0],
   });
 
   $.mockjax({
@@ -166,11 +167,12 @@ test("load session", function() {
   });
 });
 
+//FAILS
 test("show player step", function() {
   $.mockjax({
-    url: 'http://localhost:8080/sessions',
+    url: 'http://localhost:8080/sessions/131',
     dataType: 'json',
-    responseText: jsonSessions,
+    responseText: jsonSessions[0],
   });
 
   $.mockjax({
