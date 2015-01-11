@@ -83,6 +83,13 @@ test('undoneStepCount', function() {
   equal(session.get('undoneStepCount'), 2);
 });
 
+test('totalStepCount', function() {
+  var session = this.subject({
+    setup_steps: [{}, {}, {}],
+  });
+
+  equal(session.get('totalStepCount'), 3);
+});
 
 module("Integration tests", {
   setup: function() {

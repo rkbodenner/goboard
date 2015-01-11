@@ -283,6 +283,9 @@ App.Session = DS.Model.extend({
       return prev + (curr.Done === true ? 0 : 1);
     }, 0);
   }.property('setup_steps'),
+  totalStepCount: function() {
+    return this.get('setup_steps').length;
+  }.property('setup_steps'),
 });
 
 App.SessionSerializer = DS.RESTSerializer.extend({
