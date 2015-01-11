@@ -77,9 +77,14 @@
 
   <script type="text/x-handlebars" id="session-detail">
     {{sessionDivId this}}
-      <p>
+      <div class="progress-wrap-goboard progress-goboard">
+        <div class="progress-bar-goboard progress-goboard"></div>
+      </div>
+      <div>
+        <p>
         {{#link-to 'session' this}}{{id}}: {{game.name}}{{/link-to}} ({{this.undoneStepCount}})
-      </p>
+        </p>
+      </div>
     </div>
   </script>
 

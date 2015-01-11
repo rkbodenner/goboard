@@ -91,6 +91,15 @@ test('totalStepCount', function() {
   equal(session.get('totalStepCount'), 3);
 });
 
+test('completionPercentage', function() {
+  var session = this.subject({
+    setup_steps: [{Done: false}, {Done: false}, {Done: true}],
+  });
+
+  // To nearest integer
+  equal(session.get('completionPercentage'), 33);
+});
+
 module("Integration tests", {
   setup: function() {
     // before each test, ensure the application is ready to run.

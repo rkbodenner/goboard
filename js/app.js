@@ -103,8 +103,27 @@ App.helpers = {
 
 App.SessionDetailView = Ember.View.extend({
   templateName: 'session-detail',
-});
 
+  didInsertElement: function() {
+    this._super();
+    Ember.run.scheduleOnce('afterRender', this, this.afterRenderEvent);
+  },
+  // FIXME
+  // This works great for the session detail view, but for the index view,
+  // the SessionsController is used. With that controller, we don't get the right completion
+  // percentage (no such property) and we also don't select the right progress-bar divs.
+  afterRenderEvent: function() {
+    var progressWrapWidth = $('.progress-wrap-goboard').width();
+    var progressTotal = this.get('controller.completionPercentage')/100 * progressWrapWidth;
+    var animationLength = 2500;
+
+    // Animate bar to percentage length
+    // .stop() used to prevent animation queueing
+    $('.progress-bar-goboard').stop().animate({
+        left: progressTotal
+    }, animationLength);
+  },
+});
 
 App.GamesController = Ember.ArrayController.extend();
 
@@ -283,9 +302,17 @@ App.Session = DS.Model.extend({
       return prev + (curr.Done === true ? 0 : 1);
     }, 0);
   }.property('setup_steps'),
+  
   totalStepCount: function() {
     return this.get('setup_steps').length;
   }.property('setup_steps'),
+
+  completionPercentage: function() {
+    var undoneSteps = this.get('undoneStepCount');
+    var totalSteps = this.get('totalStepCount');
+    var doneSteps = totalSteps - undoneSteps;
+    return Math.round(doneSteps / totalSteps * 100);
+  }.property('totalStepCount', 'undoneStepCount'),
 });
 
 App.SessionSerializer = DS.RESTSerializer.extend({
