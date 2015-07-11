@@ -130,7 +130,9 @@
   <script type="text/x-handlebars" id="session/step">
     {{#if isPlayerDone}}
       <h2>Done!</h2>
-      <p>The other players will finish setting up the game.</p>
+      {{#unless isSessionDone}}
+        <p>The other players will finish setting up the game.</p>
+      {{/unless}}
     {{else}}
       <h2>{{step}}</h2>
       <p>{{stepDetails}}</p>

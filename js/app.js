@@ -171,6 +171,10 @@ App.SessionStepController = Ember.ObjectController.extend({
     return session.get('setup_assignments')[this.get('player')['id']]['Rule']['Details']
   }.property('session', 'player'),
 
+  isSessionDone: function() {
+    return this.get('session').get('done');
+  }.property('session'),
+
   isPlayerDone: function() {
     var session = this.get('session');
     return session.get('setup_assignments')[this.get('player')['id']]['Done'] === true;
