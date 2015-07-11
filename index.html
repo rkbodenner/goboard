@@ -124,9 +124,14 @@
   </script>
 
   <script type="text/x-handlebars" id="session/step">
-    <h2>{{step}}</h2>
-    <p>{{stepDetails}}</p>
-    <button {{action 'next_step'}} type="button" class="btn btn-primary">Next step</button>
+    {{#if isPlayerDone}}
+      <h2>Done!</h2>
+      <p>The other players will finish setting up the game.</p>
+    {{else}}
+      <h2>{{step}}</h2>
+      <p>{{stepDetails}}</p>
+      <button {{action 'next_step'}} type="button" class="btn btn-primary">Next step</button>
+    {{/if}}
   </script>
 
   <script type="text/x-handlebars" id="players">
