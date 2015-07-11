@@ -117,6 +117,11 @@ App.SessionDetailView = Ember.View.extend({
     var progressTotal = this.get('controller.completionPercentage')/100 * progressWrapWidth;
     var animationLength = 2500;
 
+    if ( this.get('controller.completionPercentage') === 100 ) {
+      animationLength = 100;
+      $('.progress-wrap-goboard').css('background', 'green');
+    }
+
     // Animate bar to percentage length
     // .stop() used to prevent animation queueing
     $('.progress-bar-goboard').stop().animate({
@@ -307,6 +312,10 @@ App.Session = DS.Model.extend({
       return prev + (curr.Done === true ? 0 : 1);
     }, 0);
   }.property('setup_steps'),
+
+  done: function() {
+    return this.get('undoneStepCount') === 0;
+  }.property('undoneStepCount'),
   
   totalStepCount: function() {
     return this.get('setup_steps').length;

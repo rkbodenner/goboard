@@ -82,7 +82,11 @@
       </div>
       <div>
         <p>
-        {{#link-to 'session' this}}{{id}}: {{game.name}}{{/link-to}} ({{this.undoneStepCount}})
+        {{#if this.done}}
+          {{#link-to 'session' this}}{{id}}: {{game.name}}{{/link-to}} ✓
+        {{else}}
+          {{#link-to 'session' this}}{{id}}: {{game.name}}{{/link-to}} <sup class="step-count">({{this.undoneStepCount}} steps to go)</sup>
+        {{/if}}
         </p>
       </div>
     </div>
