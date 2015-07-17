@@ -45,6 +45,13 @@
     {{outlet}}
   </script>
 
+  <script type="text/x-handlebars" id="index">
+    <div id="cta">
+      {{#link-to 'sessions'}}<button type="button" class="btn btn-primary">Join a game</button>{{/link-to}}
+      {{#link-to 'sessions.new'}}<button type="button" class="btn">Start a new game</button>{{/link-to}}
+    </div>
+  </script>
+
   <script type="text/x-handlebars" id="games">
     <div class="container-fluid">
       <div class="row">

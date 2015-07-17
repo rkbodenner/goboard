@@ -32,6 +32,8 @@ App.NavRoute = Ember.Route.extend({
   },
 });
 
+App.IndexRoute = App.NavRoute.extend();
+
 App.GamesRoute = App.NavRoute.extend({
   model: function() {
     return this.store.find('game');
