@@ -24,6 +24,7 @@ App.Router.map(function() {
 App.NavRoute = Ember.Route.extend({
   beforeModel: function() {
     Ember.$('div.nav-spinner').addClass('spinner');
+    Ember.$('#goboard-navbar-collapse').collapse('hide');
     App.helpers.hideErrorBanner();
   },
   afterModel: function() {
@@ -37,7 +38,7 @@ App.GamesRoute = App.NavRoute.extend({
   }
 });
 
-App.GameRoute = Ember.Route.extend({
+App.GameRoute = App.NavRoute.extend({
   model: function(params) {
     return this.store.find('game', params.game_id);
   }
@@ -55,7 +56,7 @@ App.SessionRoute = App.NavRoute.extend({
   },
 });
 
-App.SessionsNewRoute = Ember.Route.extend({
+App.SessionsNewRoute = App.NavRoute.extend({
   model: function() {
     return Ember.RSVP.hash({
       games: this.store.findAll('game'),
@@ -71,7 +72,7 @@ App.SessionsNewRoute = Ember.Route.extend({
   },
 });
 
-App.SessionStepRoute = Ember.Route.extend({
+App.SessionStepRoute = App.NavRoute.extend({
   model: function(params) {
     return this.store.find('player', params.player_id);
   }
@@ -83,7 +84,7 @@ App.PlayersRoute = App.NavRoute.extend({
   }
 });
 
-App.PlayerRoute = Ember.Route.extend({
+App.PlayerRoute = App.NavRoute.extend({
   model: function(params) {
     return this.store.find('player', params.player_id);
   }
