@@ -241,7 +241,7 @@ App.SessionsNewController = Ember.ArrayController.extend({
       var players = this.get('chosen_players');
 
       if ( game.get('min_players') > players.length || players.length > game.get('max_players') ) {
-        App.helpers.showErrorBanner(""+game.get("name")+" supports "+App.GamesController.numPlayersFunc(game));
+        App.helpers.showErrorBanner("Please select "+App.GamesController.numPlayersFunc(game)+" for "+game.get('name'));
         return;
       }
 
