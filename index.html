@@ -140,8 +140,13 @@
   <script type="text/x-handlebars" id="sessions/new">
     <h1>Let's play a game.</h1><!--'-->
     <form class="form-inline">
-      {{view Ember.Select content=games selection=game optionValuePath="content.id" optionLabelPath="content.name" class="form-control game"}}
-      {{view Ember.Select content=players selection=chosen_players multiple="multiple" optionValuePath="content.id" optionLabelPath="content.name" class="form-control players"}}
+      <div class="form-group">
+        {{view Ember.Select id="game-select" content=games selection=game optionValuePath="content.id" optionLabelPath="content.name" class="form-control game"}}
+      </div>
+      <div class="form-group">
+        <label for="players-select">Players</label>
+        {{view Ember.Select id="players-select" content=players selection=chosen_players multiple="multiple" optionValuePath="content.id" optionLabelPath="content.name" class="form-control players"}}
+      </div>
       <button {{action 'create'}} type="submit" class="btn btn-success">Start</button>
     </form>
   </script>
