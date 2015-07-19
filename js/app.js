@@ -77,7 +77,7 @@ App.SessionsNewRoute = App.NavRoute.extend({
 App.SessionStepRoute = App.NavRoute.extend({
   model: function(params) {
     return this.store.find('player', params.player_id);
-  }
+  },
 });
 
 App.PlayersRoute = App.NavRoute.extend({

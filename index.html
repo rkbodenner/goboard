@@ -104,7 +104,7 @@
         {{#if this.done}}
           {{#link-to 'session' this}}{{id}}: {{game.name}}{{/link-to}} ✓
         {{else}}
-          {{#link-to 'session' this}}{{id}}: {{game.name}}{{/link-to}} <sup class="step-count">({{this.undoneStepCount}} steps to go)</sup>
+          {{#link-to 'session' this}}{{id}}: {{game.name}}{{/link-to}} <span class="badge">{{this.undoneStepCount}}</span>
         {{/if}}
         </p>
       </div>
@@ -124,7 +124,7 @@
             <div class="row">
               <div class="col-xs-12">
                 <div class="player">
-                  <p>{{#link-to 'session.step' this player}}{{player.name}}{{/link-to}}</p>
+                  <p>{{#link-to 'session.step' this player class="btn btn-default" role="button"}}{{player.name}}{{/link-to}}</p>
                 </div>
               </div>
             </div>
