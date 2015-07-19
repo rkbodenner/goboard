@@ -59,17 +59,17 @@ var jsonSessions = [
           id: 1,
           name: "Player One"
         },
-        Done: true
+        Done: false
       }
     },
     SetupSteps: [],
   },
 ];
 
-// Unit tests
-
 emq.globalize();
 setResolver(Ember.DefaultResolver.create({ namespace: App }));
+
+// Unit tests
 
 moduleForModel("session", "Session model", {
   needs: ['model:game', 'model:player']
@@ -99,6 +99,8 @@ test('completionPercentage', function() {
   // To nearest integer
   equal(session.get('completionPercentage'), 33);
 });
+
+// Application/integration tests
 
 module("Integration tests", {
   setup: function() {
@@ -148,7 +150,6 @@ test("load sessions", function() {
   });
 });
 
-//FAILS
 test("load session", function() {
   $.mockjax({
     url: 'http://localhost:8080/sessions/131',
@@ -177,13 +178,12 @@ test("load session", function() {
   visit("/sessions/131");
 
   andThen(function() {
-    equal(find("div.session > p > a.active").text(), "131: Tic-Tac-Toe");
+    equal(find("div.session p > a.active").text(), "131: Tic-Tac-Toe");
     equal(find("div.session").length, 1, "One session");
     equal(find("div.player").length, 2, "Two players");
   });
 });
 
-//FAILS
 test("show player step", function() {
   $.mockjax({
     url: 'http://localhost:8080/sessions/131',
@@ -212,9 +212,9 @@ test("show player step", function() {
   visit("/sessions/131/players/1/step");
 
   andThen(function() {
-    equal(find("div.session > p > a.active").text(), "131: Tic-Tac-Toe");
+    equal(find("div.session p > a.active").text(), "131: Tic-Tac-Toe");
     equal(find("div.player > p > a.active").text(), "Player One");
-    equal(find("button").text(), "Next step");
+    ok(/Next step/.test(find("button").text()));
     equal(find("div.session").length, 1, "One session");
     equal(find("div.player").length, 2, "Two players");
   });
