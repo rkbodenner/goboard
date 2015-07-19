@@ -45,14 +45,14 @@
     {{outlet}}
   </script>
 
-  <script type="text/x-handlebars" id="index">
+  <script type="text/x-handlebars" data-template-name="index">
     <div id="cta">
       {{#link-to 'sessions'}}<button type="button" class="btn btn-primary">Join a game</button>{{/link-to}}
       {{#link-to 'sessions.new'}}<button type="button" class="btn">Start a new game</button>{{/link-to}}
     </div>
   </script>
 
-  <script type="text/x-handlebars" id="games">
+  <script type="text/x-handlebars" data-template-name="games">
     <div class="container-fluid">
       <div class="row">
         <div class="col-xs-3">
@@ -71,13 +71,13 @@
     </div>
   </script>
 
-  <script type="text/x-handlebars" id="game">
+  <script type="text/x-handlebars" data-template-name="game">
     {{#link-to 'sessions.new'}}<button type="button" class="btn btn-primary">New session</button>{{/link-to}}
     <h1>{{name}}</h1>
     <h2>{{numPlayers this}}</h2>
   </script>
 
-  <script type="text/x-handlebars" id="sessions">
+  <script type="text/x-handlebars" data-template-name="sessions">
     <div class="container-fluid">
       <div class="row">
         <div class="col-xs-12">
@@ -94,7 +94,7 @@
     </div>
   </script>
 
-  <script type="text/x-handlebars" id="session-detail">
+  <script type="text/x-handlebars" data-template-name="session-detail">
     {{sessionDivId this}}
       <div class="progress-wrap-goboard progress-goboard">
         <div class="progress-bar-goboard progress-goboard"></div>
@@ -111,7 +111,7 @@
     </div>
   </script>
 
-  <script type="text/x-handlebars" id="session">
+  <script type="text/x-handlebars" data-template-name="session">
     <div class="container-fluid">
       <div class="row">
         <div class="col-xs-12">
@@ -137,7 +137,7 @@
     </div>
   </script>
 
-  <script type="text/x-handlebars" id="sessions/new">
+  <script type="text/x-handlebars" data-template-name="sessions/new">
     <h1>Let's play a game.</h1><!--'-->
     <form class="form-inline">
       <div class="form-group">
@@ -151,7 +151,7 @@
     </form>
   </script>
 
-  <script type="text/x-handlebars" id="session/step">
+  <script type="text/x-handlebars" data-template-name="session/step">
     {{#if isPlayerDone}}
       <h2>Done!</h2>
       {{#unless isSessionDone}}
@@ -164,7 +164,7 @@
     {{/if}}
   </script>
 
-  <script type="text/x-handlebars" id="players">
+  <script type="text/x-handlebars" data-template-name="players">
     <div class="container-fluid">
       <div class="row">
         <div class="col-xs-3">
@@ -187,7 +187,7 @@
     </div>
   </script>
 
-  <script type="text/x-handlebars" id="player">
+  <script type="text/x-handlebars" data-template-name="player">
     {{#if isEditing}}
       {{partial 'player/edit'}}
       <button {{action 'doneEditing'}} type="button" class="btn btn-success">Done</button>
@@ -198,7 +198,7 @@
     <h1>{{name}}</h1>
   </script>
 
-  <script type="text/x-handlebars" id="player/_edit">
+  <script type="text/x-handlebars" data-template-name="player/_edit">
     <p>{{input type="text" value=name}}</p>
   </script>
 
