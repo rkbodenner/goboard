@@ -10,6 +10,10 @@
   padding-bottom: 1.5em;
 }
 
+h2.step-description {
+  margin-top: 0px;
+}
+
 #error-banner > p {
   padding: 0.75em;
 }

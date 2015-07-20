@@ -53,22 +53,20 @@
   </script>
 
   <script type="text/x-handlebars" data-template-name="games">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-xs-3">
-          {{#each}}
-          <div class="game">
-            <p>
-              {{#link-to 'game' this}}{{name}}{{/link-to}}
-            </p>
-          </div>
-          {{/each}}
+    <div class="row">
+      <div class="col-xs-3">
+        {{#each}}
+        <div class="game">
+          <p>
+            {{#link-to 'game' this}}{{name}}{{/link-to}}
+          </p>
         </div>
-        <div class="col-xs-9">
-          {{outlet}}
-        </div>
-      </div> <!-- row -->
-    </div>
+        {{/each}}
+      </div>
+      <div class="col-xs-9">
+        {{outlet}}
+      </div>
+    </div> <!-- row -->
   </script>
 
   <script type="text/x-handlebars" data-template-name="game">
@@ -78,20 +76,18 @@
   </script>
 
   <script type="text/x-handlebars" data-template-name="sessions">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-xs-12">
-          {{#each}}
-            {{view App.SessionDetailView}}
-          {{/each}}
-        </div>
-      </div> <!-- row -->
-      <div class="row">
-        <div class="col-xs-12">
-          {{outlet}}
-        </div>
-      </div> <!-- row -->
-    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        {{#each}}
+          {{view App.SessionDetailView}}
+        {{/each}}
+      </div>
+    </div> <!-- row -->
+    <div class="row">
+      <div class="col-xs-12">
+        {{outlet}}
+      </div>
+    </div> <!-- row -->
   </script>
 
   <script type="text/x-handlebars" data-template-name="session-detail">
@@ -112,27 +108,25 @@
   </script>
 
   <script type="text/x-handlebars" data-template-name="session">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-xs-12">
-          {{view App.SessionDetailView}}
-        </div>
+    <div class="row">
+      <div class="col-xs-12">
+        {{view App.SessionDetailView}}
       </div>
-      <div class="row">
-        <div class="col-xs-3">
-          {{#each player in players}}
-            <div class="row">
-              <div class="col-xs-12">
-                <div class="player">
-                  <p>{{#link-to 'session.step' this player class="btn btn-default" role="button"}}{{player.name}}{{/link-to}}</p>
-                </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">
+        {{#each player in players}}
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="player">
+                <p>{{#link-to 'session.step' this player class="btn btn-default" role="button"}}{{player.name}}{{/link-to}}</p>
               </div>
             </div>
-          {{/each}}
-        </div>
-        <div class="col-xs-9">
-          {{outlet}}
-        </div>
+          </div>
+        {{/each}}
+      </div>
+      <div class="col-xs-9">
+        {{outlet}}
       </div>
     </div>
   </script>
@@ -153,38 +147,36 @@
 
   <script type="text/x-handlebars" data-template-name="session/step">
     {{#if isPlayerDone}}
-      <h2>Done!</h2>
+      <h2 class="step-description">Done!</h2>
       {{#unless isSessionDone}}
         <p>The other players will finish setting up the game.</p>
       {{/unless}}
     {{else}}
-      <h2>{{step}}</h2>
+      <h2 class="step-description">{{step}}</h2>
       <p>{{stepDetails}}</p>
       <button {{action 'next_step'}} type="button" class="btn btn-primary">Next step</button>
     {{/if}}
   </script>
 
   <script type="text/x-handlebars" data-template-name="players">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-xs-3">
-          {{#each}}
-          <div class="player">
-            <p>
-              {{#link-to 'player' this}}{{name}}{{/link-to}}
-            </p>
-          </div>
-          {{/each}}
-          <form class="form">
-            {{input type="text" value=name placeholder="Name"}}
-            <button {{action 'create'}} type="submit" class="btn btn-success">+</button>
-          </form>
+    <div class="row">
+      <div class="col-xs-3">
+        {{#each}}
+        <div class="player">
+          <p>
+            {{#link-to 'player' this}}{{name}}{{/link-to}}
+          </p>
         </div>
-        <div class="col-xs-9">
-          {{outlet}}
-        </div>
-      </div> <!-- row -->
-    </div>
+        {{/each}}
+        <form class="form">
+          {{input type="text" value=name placeholder="Name"}}
+          <button {{action 'create'}} type="submit" class="btn btn-success">+</button>
+        </form>
+      </div>
+      <div class="col-xs-9">
+        {{outlet}}
+      </div>
+    </div> <!-- row -->
   </script>
 
   <script type="text/x-handlebars" data-template-name="player">
